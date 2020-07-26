@@ -4,6 +4,8 @@
             <p>FLASHCARDS</p>
 
             <a
+                v-on:click="expandBurger = !expandBurger"
+                v-bind:class="{'is-active': expandBurger}"
                 role="button"
                 class="navbar-burger burger"
                 aria-label="menu"
@@ -16,7 +18,7 @@
             </a>
         </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
+        <div v-bind:class="{'is-active': expandBurger}" class="navbar-menu">
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
@@ -37,6 +39,11 @@
     name: 'navbar',
     props: ['navigation'],
     components: { },
+    data() {
+        return {
+            expandBurger: false
+        };
+    },
     methods: {
       // test() {
       //   ${'#.navbar-burger'}

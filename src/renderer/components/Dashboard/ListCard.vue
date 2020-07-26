@@ -19,3 +19,9 @@ export default {
     computed: {},
 };
 </script>
+
+<style scoped>
+    .card{
+        cursor: pointer;
+    }
+</style>

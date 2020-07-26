@@ -16,12 +16,13 @@ const winURL = process.env.NODE_ENV === 'development'
 function createWindow() {
   // create main browser window
   mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 900,
+    width: 1400,
+    height: 700,
     useContentSize: true,
     show: true,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true
     }
   })
 

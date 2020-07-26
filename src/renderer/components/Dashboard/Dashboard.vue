@@ -33,14 +33,14 @@ export default {
         addList(data) {
             console.log(data);
             dbhelper.getTables((rows) => {
-                lists = rows.map(row => row.name);
+                this.lists = rows.map(row => row.name);
             });
         },
     },
     created: function () {
         dbhelper.openDatabase(() => {
             dbhelper.getTables((rows) => {
-                lists = rows.map(row => row.name);
+                this.lists = rows.map(row => row.name);
             });
         });
     },
