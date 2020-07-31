@@ -1,4 +1,4 @@
-# vue-flashcards
+# flashcards
 
 > An electron-vue project
 
