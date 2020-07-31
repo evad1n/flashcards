@@ -93,7 +93,7 @@ export function updateEntry(table_name, data) {
     cols = cols.substring(0, cols.length - 1) // Cut off last comma
     console.log(`UPDATE ${table_name} SET ${cols} WHERE rowid = ${data.id};`)
 
-    const stmt = db.prepare(`UPDATE ${table_name} SET ${cols} WHERE rowid = ${data.id};`)
+    const stmt = db.prepare(`UPDATE "${table_name}" SET ${cols} WHERE rowid = ${data.id};`)
     try {
         stmt.run()
         console.log("Edited entry (id = " + data.id + ") " + cols);
