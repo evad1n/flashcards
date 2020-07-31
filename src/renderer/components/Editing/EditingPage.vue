@@ -18,9 +18,21 @@ export default {
     props: ["table_name"],
     components: {Navbar, Sidebar},
     methods: {
-        // test() {
-        //   ${'#.navbar-burger'}
-        // }
+        prettify(sentence) {
+            var words = sentence.split('_')
+            console.log(words)
+            for (let index = 0; index < words.length; index++) {
+                words[index] = capitalizeFirstLetter(words[index])
+            }
+
+            return words.join(' ')
+        },
+        capitalizeFirstLetter(word) {
+            var letter = word.charAt(0)
+            letter = letter.toUpperCase()
+            word = word.substring(1, word.length)
+            return letter + word
+        }
     },
     computed: {}
 };

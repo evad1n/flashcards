@@ -6,7 +6,7 @@ process.on('SIGHUP', () => process.exit(128 + 1));
 process.on('SIGINT', () => process.exit(128 + 2));
 process.on('SIGTERM', () => process.exit(128 + 15));
 
-export function getTables() {
+function getTables() {
     const stmt = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name`)
     try {
         return stmt.all()
@@ -15,13 +15,13 @@ export function getTables() {
     }
 }
 
-export function addTable(name, columns) {
+function addTable(name, columns) {
     let cols = ""
     columns.forEach(col => {
-        cols += `"` + col + `" text,`
+        cols += col + " text,"
     });
     cols = cols.substring(0, cols.length - 1) // Cut off last comma
-    const stmt = db.prepare(`CREATE TABLE "${name}"(${cols})`)
+    const stmt = db.prepare(`CREATE TABLE ${name}(${cols})`)
 
     try {
         stmt.run()
@@ -30,8 +30,8 @@ export function addTable(name, columns) {
     }
 }
 
-export function editTable(name, new_name) {
-    const stmt = db.prepare(`ALTER TABLE "${name}" RENAME TO "${new_name}";`)
+function editTable(name, data) {
+    const stmt = db.prepare(`ALTER TABLE ${name} RENAME TO ${data.name};`)
     try {
         stmt.run()
     } catch (error) {
@@ -39,8 +39,8 @@ export function editTable(name, new_name) {
     }
 }
 
-export function deleteTable(name) {
-    const stmt = db.prepare(`DROP TABLE "${name}"`)
+function deleteTable(name) {
+    const stmt = db.prepare(`DROP TABLE ${name}`)
     try {
         stmt.run()
     } catch (error) {
@@ -49,8 +49,8 @@ export function deleteTable(name) {
 }
 
 // Get all entries in a table ordered by first column
-export function getEntries(table_name) {
-    const stmt = db.prepare(`SELECT rowid, * FROM "${table_name}" ORDER BY 1`)
+function getEntries(table_name) {
+    const stmt = db.prepare(`SELECT rowid, * FROM ${table_name} ORDER BY 1`)
     try {
         return stmt.all()
     } catch (error) {
@@ -58,7 +58,7 @@ export function getEntries(table_name) {
     }
 }
 
-export function addEntry(table_name, data) {
+function addEntry(table_name, data) {
     let cols = ""
     Object.keys(data).forEach(key => {
         if (key != "id") {
@@ -67,15 +67,15 @@ export function addEntry(table_name, data) {
     });
     cols = cols.substring(0, cols.length - 1) // Cut off last comma
 
-    // let vals = ""
-    // Object.keys(data).forEach(key => {
-    //     if (key != "id") {
-    //         vals += '"' + data[key] + '",'
-    //     }
-    // });
-    // vals = vals.substring(0, vals.length - 1) // Cut off last comma
+    let vals = ""
+    Object.keys(data).forEach(key => {
+        if (key != "id") {
+            vals += '"' + data[key] + '",'
+        }
+    });
+    vals = vals.substring(0, vals.length - 1) // Cut off last comma
 
-    const stmt = db.prepare(`INSERT INTO "${table_name}" VALUES (${cols})`)
+    const stmt = db.prepare(`INSERT INTO ${table_name} VALUES (${cols})`)
     try {
         return stmt.run(data).lastInsertRowid
     } catch (error) {
@@ -83,7 +83,7 @@ export function addEntry(table_name, data) {
     }
 }
 
-export function updateEntry(table_name, data) {
+function updateEntry(table_name, data) {
     let cols = ''
     Object.keys(data).forEach(key => {
         if (key != "id") {
@@ -102,7 +102,7 @@ export function updateEntry(table_name, data) {
     }
 }
 
-export function deleteEntry(table_name, id) {
+function deleteEntry(table_name, id) {
     const stmt = db.prepare(`DELETE FROM ${table_name} WHERE rowid = ${id};`)
     try {
         stmt.run()
