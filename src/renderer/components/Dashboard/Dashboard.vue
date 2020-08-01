@@ -32,17 +32,12 @@ export default {
     methods: {
         addList(data) {
             console.log(data);
-            dbhelper.getTables((rows) => {
-                this.lists = rows.map(row => row.name);
-            });
+            dbhelper.addTable(data.name, [...data.front,...data.back], data.front.length)
         },
     },
     created: function () {
-        dbhelper.openDatabase(() => {
-            dbhelper.getTables((rows) => {
-                this.lists = rows.map(row => row.name);
-            });
-        });
+        this.lists = dbhelper.getTables();
+        console.log(this.lists)
     },
 };
 </script>

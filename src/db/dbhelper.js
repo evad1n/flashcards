@@ -1,5 +1,5 @@
 const Database = require('better-sqlite3');
-const db = new Database('flashcards.db', { verbose: console.log });
+const db = new Database('./src/db/flashcards.db', { fileMustExist: true, verbose: console.log });
 
 process.on('exit', () => db.close());
 process.on('SIGHUP', () => process.exit(128 + 1));
@@ -7,24 +7,37 @@ process.on('SIGINT', () => process.exit(128 + 2));
 process.on('SIGTERM', () => process.exit(128 + 15));
 
 export function getTables() {
+    console.log(db)
+    // const stmt = db.prepare(`SELECT name FROM lists ORDER BY name`)
     const stmt = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name`)
     try {
-        return stmt.all()
+        console.log(stmt.all())
     } catch (error) {
         console.log(error)
     }
 }
 
-export function addTable(name, columns) {
-    let cols = ""
+export function getFrontFields(name) {
+    const stmt = db.prepare(`SELECT front_fields FROM lists WHERE name = "${name}"`)
+    try {
+        return stmt.get()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export function addTable(name, columns, front_fields) {
+    let cols = ``
     columns.forEach(col => {
         cols += `"` + col + `" text,`
     });
     cols = cols.substring(0, cols.length - 1) // Cut off last comma
-    const stmt = db.prepare(`CREATE TABLE "${name}"(${cols})`)
+    const stmt1 = db.prepare(`CREATE TABLE IF NOT EXISTS "${name}"(${cols})`)
+    // const stmt2 = db.prepare(`INSERT INTO lists VALUES ("${name}", ${front_fields})`)
 
     try {
-        stmt.run()
+        stmt1.run()
+        // stmt2.run()
     } catch (error) {
         console.log(error)
     }
@@ -59,23 +72,19 @@ export function getEntries(table_name) {
 }
 
 export function addEntry(table_name, data) {
-    let cols = ""
+    let cols = ``
     Object.keys(data).forEach(key => {
-        if (key != "id") {
-            cols += "@" + key + ","
-        }
+        cols += `@` + key + `,`
     });
     cols = cols.substring(0, cols.length - 1) // Cut off last comma
 
-    // let vals = ""
-    // Object.keys(data).forEach(key => {
-    //     if (key != "id") {
-    //         vals += '"' + data[key] + '",'
-    //     }
-    // });
-    // vals = vals.substring(0, vals.length - 1) // Cut off last comma
+    let vals = ``
+    Object.keys(data).forEach(key => {
+        vals += '"' + data[key] + '",'
+    });
+    vals = vals.substring(0, vals.length - 1) // Cut off last comma
 
-    const stmt = db.prepare(`INSERT INTO "${table_name}" VALUES (${cols})`)
+    const stmt = db.prepare(`INSERT INTO "${table_name}" (${vals}) VALUES (${cols})`)
     try {
         return stmt.run(data).lastInsertRowid
     } catch (error) {
