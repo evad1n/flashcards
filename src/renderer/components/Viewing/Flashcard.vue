@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-content">
+        <div class="card-content flip-card">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
                     <h2 id="word"></h2>

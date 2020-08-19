@@ -7,11 +7,9 @@ process.on('SIGINT', () => process.exit(128 + 2));
 process.on('SIGTERM', () => process.exit(128 + 15));
 
 export function getTables() {
-    console.log(db)
-    // const stmt = db.prepare(`SELECT name FROM lists ORDER BY name`)
-    const stmt = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' ORDER BY name`)
+    const stmt = db.prepare(`SELECT name FROM lists ORDER BY name`)
     try {
-        console.log(stmt.all())
+        return stmt.all()
     } catch (error) {
         console.log(error)
     }
@@ -33,11 +31,20 @@ export function addTable(name, columns, front_fields) {
     });
     cols = cols.substring(0, cols.length - 1) // Cut off last comma
     const stmt1 = db.prepare(`CREATE TABLE IF NOT EXISTS "${name}"(${cols})`)
-    // const stmt2 = db.prepare(`INSERT INTO lists VALUES ("${name}", ${front_fields})`)
+    const stmt2 = db.prepare(`INSERT INTO "lists" (name, front_fields) VALUES (?, ?)`)
 
     try {
         stmt1.run()
-        // stmt2.run()
+        stmt2.run(name, front_fields)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export function describeTable(name) {
+    const stmt = db.prepare(`PRAGMA table_info(${name});`)
+    try {
+        console.log(stmt.run())
     } catch (error) {
         console.log(error)
     }

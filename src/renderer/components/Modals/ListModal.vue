@@ -60,7 +60,7 @@ export default {
             frontFields: [""],
             backFields: [""]
         };
-    },
+    },  
     methods: {
         submitList() {
             // Send data to parent
