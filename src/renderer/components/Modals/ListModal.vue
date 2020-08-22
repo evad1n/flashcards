@@ -15,31 +15,37 @@
                     </div>
                 </div>
 
-                <div>
-                    <div v-for="(field, column) in frontFields" v-bind:key="column" class="field">
-                        <label class="label">Front Field {{ column + 1}}</label>
-                        <div class="control">
-                            <input v-model="frontFields[column]" class="input" type="text" :placeholder="'Front Field ' + (column + 1)" />
-                        </div>
+                <div v-for="(field, column) in frontFields" v-bind:key="column" class="field">
+                    <label class="label">Front Field {{ column + 1}}</label>
+                    <div class="control">
+                        <input
+                            v-model="frontFields[column]"
+                            class="input"
+                            type="text"
+                            :placeholder="'Front Field ' + (column + 1)"
+                        />
                     </div>
-
-                    <button v-on:click="frontFields.push('')" class="button">Add Front Field</button>
                 </div>
 
-                <div >
-                    <div
-                        v-for="(field, column) in backFields"
-                        v-bind:key="column + frontFields.length"
-                        class="field"
-                    >
-                        <label class="label">Back Field {{ column + 1 }}</label>
-                        <div class="control">
-                            <input v-model="backFields[column]" class="input" type="text" :placeholder="'Back Field ' + (column + 1)" />
-                        </div>
-                    </div>
+                <button v-on:click="frontFields.push('')" class="button is-info mb-4">Add Front Field</button>
 
-                    <button v-on:click="backFields.push('')" class="button">Add Back Field</button>
+                <div
+                    v-for="(field, column) in backFields"
+                    v-bind:key="column + frontFields.length"
+                    class="field"
+                >
+                    <label class="label">Back Field {{ column + 1 }}</label>
+                    <div class="control">
+                        <input
+                            v-model="backFields[column]"
+                            class="input"
+                            type="text"
+                            :placeholder="'Back Field ' + (column + 1)"
+                        />
+                    </div>
                 </div>
+
+                <button v-on:click="backFields.push('')" class="button is-info">Add Back Field</button>
             </section>
 
             <footer class="modal-card-foot">
@@ -58,34 +64,38 @@ export default {
         return {
             name: "",
             frontFields: [""],
-            backFields: [""]
+            backFields: [""],
         };
-    },  
+    },
     methods: {
         submitList() {
             // Send data to parent
-            this.$emit('add-list', {name: this.name, front: this.frontFields, back: this.backFields})
+            this.$emit("add-list", {
+                name: this.name,
+                front: this.frontFields,
+                back: this.backFields,
+            });
             // Close modal
-            this.$emit('close-modal')
+            this.$emit("close-modal");
             // Reset fields
-            this.name= ""
-            this.frontFields= [""]
-            this.backFields= [""]
+            this.name = "";
+            this.frontFields = [""];
+            this.backFields = [""];
         },
         isValid() {
-            this.frontFields.forEach(field => {
+            this.frontFields.forEach((field) => {
                 if (field == "") {
-                    return false
+                    return false;
                 }
             });
-            this.backFields.forEach(field => {
+            this.backFields.forEach((field) => {
                 if (field == "") {
-                    return false
+                    return false;
                 }
             });
-            return this.name != ""
-        }
+            return this.name != "";
+        },
     },
-    computed: {}
+    computed: {},
 };
 </script>

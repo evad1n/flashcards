@@ -1,8 +1,14 @@
 <template>
     <div>
-        <Navbar v-on:list-modal="showModal = !showModal" navigation="none"></Navbar>
+        <Navbar v-on:list-modal="listModal = !listModal" navigation="none"></Navbar>
         <div class="columns">
-            <ListCard v-for="(list, index) in lists" v-bind:name="list" v-bind:key="index"></ListCard>
+            <ListCard 
+            v-for="(list, index) in lists" 
+            v-on:rename-list="goToRename" 
+            v-on:delete-list="goToDelete" 
+            v-bind:name="list" 
+            v-bind:key="index">
+            </ListCard>
         </div>
         <ListModal
             v-on:add-list="addList"
@@ -10,12 +16,15 @@
             v-bind:class="{'is-active': listModal}"
         ></ListModal>
         <RenameModal
-            v-on:rename-list="renameList"
+            :listData="currentList"
+            v-on:rename="renameList"
             v-on:close-modal="renameModal = !renameModal;"
             v-bind:class="{'is-active': renameModal}"
         ></RenameModal>
         <ConfirmModal
-            v-on:delete-list="deleteList"
+            type="list"
+            :name="currentList.name"
+            v-on:confirm="deleteList"
             v-on:close-modal="confirmModal = !confirmModal;"
             v-bind:class="{'is-active': confirmModal}"
         ></ConfirmModal>
@@ -41,6 +50,12 @@ export default {
             listModal: false,
             renameModal: false,
             confirmModal: false,
+            currentList: {
+                name: "",
+                front: [],
+                back: []
+            },
+            confirmPrompt: ""
         };
     },
     methods: {
@@ -53,14 +68,27 @@ export default {
             this.lists = dbhelper.getTables().map(table => table.name)
             console.log(this.lists)
         },
-        goToRename() {
-            console.log("rename");
+        goToRename(name) {
+            this.renameModal = true
+            this.currentList.name = name
+            dbhelper.describeTable(name)
+            console.log(`rename ${name}`);
         },
-        goToDelete() {
-            console.log("delete");
+        goToDelete(name) {
+            this.confirmModal = true
+            this.currentList.name = name
+            this.confirmPrompt = `delete the ${name} list`
         },
-        renameList(data) {},
-        deleteList(data) {},
+        renameList(data) {
+            // rename the list
+            console.log(`renamed ${name} list`)
+            this.refreshLists()
+        },
+        deleteList() {
+            dbhelper.deleteTable(this.currentList.name)
+            console.log(`deleted list ${this.currentList.name}`)
+            this.refreshLists()
+        },
     },
     created: function () {
         this.lists = dbhelper.getTables().map(table => table.name)
@@ -68,3 +96,10 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+    .columns{
+        display: flex;
+        flex-wrap:wrap;
+    }
+</style>

@@ -3,7 +3,7 @@
         <div v-on:click="$emit('close-modal')" class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Create a New List</p>
+                <p class="modal-card-title">Rename this list</p>
                 <button v-on:click="$emit('close-modal')" class="delete" aria-label="close"></button>
             </header>
 
@@ -15,35 +15,37 @@
                     </div>
                 </div>
 
-                <div>
-                    <div v-for="(field, column) in frontFields" v-bind:key="column" class="field">
-                        <label class="label">Front Field {{ column + 1}}</label>
-                        <div class="control">
-                            <input v-model="frontFields[column]" class="input" type="text" :placeholder="'Front Field ' + (column + 1)" />
-                        </div>
+                <div v-for="(field, column) in frontFields" v-bind:key="column" class="field">
+                    <label class="label">Front Field {{ column + 1}}</label>
+                    <div class="control">
+                        <input
+                            v-model="frontFields[column]"
+                            class="input"
+                            type="text"
+                            :placeholder="'Front Field ' + (column + 1)"
+                        />
                     </div>
-
-                    <button v-on:click="frontFields.push('')" class="button">Add Front Field</button>
                 </div>
 
-                <div >
-                    <div
-                        v-for="(field, column) in backFields"
-                        v-bind:key="column + frontFields.length"
-                        class="field"
-                    >
-                        <label class="label">Back Field {{ column + 1 }}</label>
-                        <div class="control">
-                            <input v-model="backFields[column]" class="input" type="text" :placeholder="'Back Field ' + (column + 1)" />
-                        </div>
+                <div
+                    v-for="(field, column) in backFields"
+                    v-bind:key="column + frontFields.length"
+                    class="field"
+                >
+                    <label class="label">Back Field {{ column + 1 }}</label>
+                    <div class="control">
+                        <input
+                            v-model="backFields[column]"
+                            class="input"
+                            type="text"
+                            :placeholder="'Back Field ' + (column + 1)"
+                        />
                     </div>
-
-                    <button v-on:click="backFields.push('')" class="button">Add Back Field</button>
                 </div>
             </section>
 
             <footer class="modal-card-foot">
-                <button v-on:click="submitList" class="button is-success">Create List</button>
+                <button v-on:click="renameList" class="button is-success">Save changes</button>
             </footer>
         </div>
     </div>
@@ -52,40 +54,44 @@
 <script>
 export default {
     name: "list-modal",
-    props: [],
+    props: ["listData"],
     components: {},
     data() {
         return {
-            name: "",
+            name: this.listData.name,
             frontFields: [""],
-            backFields: [""]
+            backFields: [""],
         };
-    },  
+    },
     methods: {
-        submitList() {
+        renameList() {
             // Send data to parent
-            this.$emit('add-list', {name: this.name, front: this.frontFields, back: this.backFields})
+            this.$emit("rename", {
+                name: this.name,
+                front: this.frontFields,
+                back: this.backFields,
+            });
             // Close modal
-            this.$emit('close-modal')
+            this.$emit("close-modal");
             // Reset fields
-            this.name= ""
-            this.frontFields= [""]
-            this.backFields= [""]
+            this.name = "";
+            this.frontFields = [""];
+            this.backFields = [""];
         },
         isValid() {
-            this.frontFields.forEach(field => {
+            this.frontFields.forEach((field) => {
                 if (field == "") {
-                    return false
+                    return false;
                 }
             });
-            this.backFields.forEach(field => {
+            this.backFields.forEach((field) => {
                 if (field == "") {
-                    return false
+                    return false;
                 }
             });
-            return this.name != ""
-        }
+            return this.name != "";
+        },
     },
-    computed: {}
+    computed: {},
 };
 </script>

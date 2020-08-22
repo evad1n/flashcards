@@ -3,47 +3,17 @@
         <div v-on:click="$emit('close-modal')" class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Create a New List</p>
+                <p class="modal-card-title">Are you sure?</p>
                 <button v-on:click="$emit('close-modal')" class="delete" aria-label="close"></button>
             </header>
 
             <section class="modal-card-body">
-                <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                        <input v-model="name" class="input" type="text" placeholder="List Name" />
-                    </div>
-                </div>
-
-                <div>
-                    <div v-for="(field, column) in frontFields" v-bind:key="column" class="field">
-                        <label class="label">Front Field {{ column + 1}}</label>
-                        <div class="control">
-                            <input v-model="frontFields[column]" class="input" type="text" :placeholder="'Front Field ' + (column + 1)" />
-                        </div>
-                    </div>
-
-                    <button v-on:click="frontFields.push('')" class="button">Add Front Field</button>
-                </div>
-
-                <div >
-                    <div
-                        v-for="(field, column) in backFields"
-                        v-bind:key="column + frontFields.length"
-                        class="field"
-                    >
-                        <label class="label">Back Field {{ column + 1 }}</label>
-                        <div class="control">
-                            <input v-model="backFields[column]" class="input" type="text" :placeholder="'Back Field ' + (column + 1)" />
-                        </div>
-                    </div>
-
-                    <button v-on:click="backFields.push('')" class="button">Add Back Field</button>
-                </div>
+                <div class="content">Do you really want to delete the {{ type}} <strong>{{ name }}</strong>?</div>
             </section>
 
             <footer class="modal-card-foot">
-                <button v-on:click="submitList" class="button is-success">Create List</button>
+                <button v-on:click="confirm" class="button is-danger">Yes</button>
+                <button v-on:click="$emit('close-modal')" class="button">No</button>
             </footer>
         </div>
     </div>
@@ -52,27 +22,34 @@
 <script>
 export default {
     name: "list-modal",
-    props: [],
+    props: ["type", "name"],
     components: {},
     data() {
-        return {
-            name: "",
-            frontFields: [""],
-            backFields: [""]
-        };
+        return {};
     },
     methods: {
-        submitList() {
+        confirm() {
             // Send data to parent
-            this.$emit('add-list', {name: this.name, front: this.frontFields, back: this.backFields})
+            this.$emit("confirm");
             // Close modal
-            this.$emit('close-modal')
-            // Reset fields
-            this.name= ""
-            this.frontFields= [""]
-            this.backFields= [""]
-        }
+            this.$emit("close-modal");
+        },
     },
-    computed: {}
+    computed: {},
 };
 </script>
+
+<style scoped>
+.modal-card-head {
+    text-align: center;
+}
+
+.content{
+    text-align: center;
+}
+
+footer{
+    display: flex;
+    justify-content:center;
+}
+</style>

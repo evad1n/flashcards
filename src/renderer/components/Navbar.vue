@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <p>FLASHCARDS</p>
+            <h1>FLASHCARDS</h1>
 
             <a
                 v-on:click="expandBurger = !expandBurger"
@@ -56,3 +56,9 @@
     },
   }
 </script>
+
+<style scoped>
+    h1{
+        font-size: 2em;
+    }
+</style>

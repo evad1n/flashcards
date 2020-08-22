@@ -7,9 +7,9 @@ process.on('SIGINT', () => process.exit(128 + 2));
 process.on('SIGTERM', () => process.exit(128 + 15));
 
 export function getTables() {
-    const stmt = db.prepare(`SELECT name FROM lists ORDER BY name`)
+    const tables = db.prepare(`SELECT name FROM lists ORDER BY name`)
     try {
-        return stmt.all()
+        return tables.all()
     } catch (error) {
         console.log(error)
     }
@@ -41,10 +41,18 @@ export function addTable(name, columns, front_fields) {
     }
 }
 
-export function describeTable(name) {
-    const stmt = db.prepare(`PRAGMA table_info(${name});`)
+/**
+ * 
+ * @param {string} table_name name of the table
+ * 
+ * Returns column names and number of front fields for a list
+ */
+export function describeTable(table_name) {
+    const columns = db.prepare(`PRAGMA table_info(${table_name});`)
+    const frontFields = db.prepare(`SELECT front_fields FROM lists WHERE name = ${table_name}`)
     try {
-        console.log(stmt.run())
+        console.log(columns.all())
+        console.log(frontFields.all())
     } catch (error) {
         console.log(error)
     }
@@ -59,10 +67,12 @@ export function editTable(name, new_name) {
     }
 }
 
-export function deleteTable(name) {
-    const stmt = db.prepare(`DROP TABLE "${name}"`)
+export function deleteTable(table_name) {
+    const dropTable = db.prepare(`DROP TABLE "${table_name}"`)
+    const dropFromLists = db.prepare(`DELETE FROM lists WHERE name = ${table_name};`)
     try {
-        stmt.run()
+        dropTable.run()
+        dropFromLists.run()
     } catch (error) {
         console.log(error)
     }
