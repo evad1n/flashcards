@@ -49,10 +49,12 @@ export function addTable(name, columns, front_fields) {
  */
 export function describeTable(table_name) {
     const columns = db.prepare(`PRAGMA table_info(${table_name});`)
-    const frontFields = db.prepare(`SELECT front_fields FROM lists WHERE name = ${table_name}`)
+    const frontFields = db.prepare(`SELECT front_fields FROM lists WHERE name = $table`)
     try {
-        console.log(columns.all())
-        console.log(frontFields.all())
+        let data = {}
+        data.columns = columns.all()
+        data.frontFields = frontFields.all({table: table_name})
+        return data
     } catch (error) {
         console.log(error)
     }

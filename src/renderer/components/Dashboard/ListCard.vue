@@ -1,17 +1,15 @@
 <template>
-    <div class="column is-one-third">
-        <div class="flip-card">
-            <div class="flip-card-inner">
-                <div class="flip-card-front">
-                    <p class="title">{{ this.name }}</p>
-                </div>
-                <div class="flip-card-back">
-                    <div class="button-list">
-                        <button v-on:click="goToViewing" class="button">VIEW</button>
-                        <button v-on:click="goToEditing" class="button">EDIT</button>
-                        <button v-on:click="emitRename" class="button">RENAME</button>
-                        <button v-on:click="emitDelete" class="button">DELETE</button>
-                    </div>
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <p class="title">{{ this.name }}</p>
+            </div>
+            <div class="flip-card-back">
+                <div class="button-list">
+                    <button v-on:click="goToViewing" class="button">VIEW</button>
+                    <button v-on:click="goToEditing" class="button">EDIT</button>
+                    <button v-on:click="emitRename" class="button">RENAME</button>
+                    <button v-on:click="emitDelete" class="button">DELETE</button>
                 </div>
             </div>
         </div>

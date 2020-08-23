@@ -2,13 +2,18 @@
     <div>
         <Navbar v-on:list-modal="listModal = !listModal" navigation="none"></Navbar>
         <div class="columns">
-            <ListCard 
-            v-for="(list, index) in lists" 
-            v-on:rename-list="goToRename" 
-            v-on:delete-list="goToDelete" 
-            v-bind:name="list" 
-            v-bind:key="index">
-            </ListCard>
+            <div v-for="(list, index) in lists" v-bind:key="index" class="column is-one-third">
+                <ListCard
+                    v-on:rename-list="goToRename"
+                    v-on:delete-list="goToDelete"
+                    v-bind:name="list"
+                ></ListCard>
+            </div>
+            <div class="column is-one-third">
+                <div class="add-card" v-on:click="listModal = !listModal">
+
+                </div>
+            </div>
         </div>
         <ListModal
             v-on:add-list="addList"
@@ -53,53 +58,73 @@ export default {
             currentList: {
                 name: "",
                 front: [],
-                back: []
+                back: [],
             },
-            confirmPrompt: ""
+            confirmPrompt: "",
         };
     },
     methods: {
         addList(data) {
             console.log(data);
-            dbhelper.addTable(data.name, [...data.front,...data.back], data.front.length)
-            this.refreshLists()
+            dbhelper.addTable(
+                data.name,
+                [...data.front, ...data.back],
+                data.front.length
+            );
+            this.refreshLists();
         },
         refreshLists() {
-            this.lists = dbhelper.getTables().map(table => table.name)
-            console.log(this.lists)
+            this.lists = dbhelper.getTables().map((table) => table.name);
+            console.log(this.lists);
         },
         goToRename(name) {
-            this.renameModal = true
-            this.currentList.name = name
-            dbhelper.describeTable(name)
-            console.log(`rename ${name}`);
+            this.renameModal = true;
+            this.currentList.name = name;
+            console.log(dbhelper.describeTable(name));
+            // console.log(`rename ${name}`);
         },
         goToDelete(name) {
-            this.confirmModal = true
-            this.currentList.name = name
-            this.confirmPrompt = `delete the ${name} list`
+            this.confirmModal = true;
+            this.currentList.name = name;
+            this.confirmPrompt = `delete the ${name} list`;
         },
         renameList(data) {
             // rename the list
-            console.log(`renamed ${name} list`)
-            this.refreshLists()
+            console.log(`renamed ${name} list`);
+            this.refreshLists();
         },
         deleteList() {
-            dbhelper.deleteTable(this.currentList.name)
-            console.log(`deleted list ${this.currentList.name}`)
-            this.refreshLists()
+            dbhelper.deleteTable(this.currentList.name);
+            console.log(`deleted list ${this.currentList.name}`);
+            this.refreshLists();
         },
     },
     created: function () {
-        this.lists = dbhelper.getTables().map(table => table.name)
-        console.log(this.lists)
+        this.lists = dbhelper.getTables().map((table) => table.name);
+        console.log(this.lists);
     },
 };
 </script>
 
 <style scoped>
-    .columns{
-        display: flex;
-        flex-wrap:wrap;
-    }
+.columns {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.add-card {
+    cursor: pointer;
+    position: absolute;
+    margin: 5vh auto;
+    width: 25vw;
+    height: 30vh;
+    border: solid 2px #bbbbbb;
+    border-radius: 5px;
+    background-image: url(../../assets/plus.png);
+}
+
+.add-card:hover{
+    border: solid 2px #999;
+    background-color: #eee;
+}
 </style>
