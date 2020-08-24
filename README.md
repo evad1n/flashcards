@@ -8,6 +8,14 @@
 # install dependencies
 npm install
 
+# rebuild native modules
+
+Linux
+./node_modules/.bin/electron-rebuild
+
+Windows
+.\node_modules\.bin\electron-rebuild.cmd
+
 # serve with hot reload at localhost:9080
 npm run dev
 

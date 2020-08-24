@@ -120,7 +120,7 @@ export default {
     height: 30vh;
     border: solid 2px #bbbbbb;
     border-radius: 5px;
-    background-image: url(../../assets/plus.png);
+    /* background-image: url(../../assets/plus.png); */
 }
 
 .add-card:hover{
