@@ -23,7 +23,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
-    }
+    },
+    icon: 'build/icons/icon.png'
   })
 
   // // create a new `splash`-Window 

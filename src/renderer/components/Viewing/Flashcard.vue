@@ -1,11 +1,9 @@
 <template>
-    <div class="card">
+    <div class="wrapper">
         <div class="card-content flip-card">
             <div class="flip-card-inner">
                 <div class="flip-card-front">
-                    <h2 id="word"></h2>
-                    <h3 id="pronunciation"></h3>
-                    <h3 id="part-of-speech"></h3>
+                    <p></p>
                 </div>
                 <div class="flip-card-back">
                     <p id="definition"></p>
@@ -66,7 +64,6 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
     border: solid 1px black;
     border-radius: 5px;
 }

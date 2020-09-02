@@ -11,13 +11,13 @@ export default new Router({
       component: require('@/components/Dashboard/Dashboard.vue').default
     },
     {
-      path: '/viewing',
+      path: '/viewing/:name',
       name: 'viewing',
       component: require('@/components/Viewing/ViewingPage.vue').default,
       props: true
     },
     {
-      path: '/editing',
+      path: '/editing/:name',
       name: 'editing',
       component: require('@/components/Editing/EditingPage.vue').default,
       props: true

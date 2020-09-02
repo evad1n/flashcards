@@ -39,9 +39,8 @@
         </div>
 
         <HistoryModal
-            v-on:add-list="addList"
-            v-on:close-modal="showModal = !showModal;"
-            v-bind:class="{'is-active': showModal}"
+            v-on:close-modal="historyModal = !historyModal"
+            v-bind:class="{'is-active': historyModal}"
         ></HistoryModal>
     </div>
 </template>
@@ -49,7 +48,7 @@
 <script>
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
-import Flashcard from "../Viewing/Flashcard"
+import Flashcard from "../Viewing/Flashcard";
 import HistoryModal from "../Modals/HistoryModal";
 
 import * as dbhelper from "../../../db/dbhelper.js";
@@ -60,8 +59,8 @@ export default {
     components: { Navbar, Sidebar, Flashcard, HistoryModal },
     data() {
         return {
-            navigation: "none",
             cards: [],
+            historyModal: false,
         };
     },
     methods: {
@@ -71,16 +70,12 @@ export default {
     },
     computed: {},
     created: function () {
-        // dbhelper.openDatabase(() => {
-        //     dbhelper.getEntries(this.table_name, (rows) => {
-        //         this.cards = rows;
-        //         console.log(rows);
-        //     });
-        // });
-        dbhelper.getEntries(this.table_name, (rows) => {
-            this.cards = rows;
-            console.log(rows);
-        });
+        // dbhelper.getEntries(this.table_name);
+    },
+    watch: {
+        $route(to, from) {
+            console.log("here is viewing");
+        },
     },
 };
 </script>

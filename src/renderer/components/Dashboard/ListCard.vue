@@ -28,13 +28,13 @@ export default {
         goToViewing() {
             this.$router.push({
                 name: "viewing",
-                params: this.name,
+                params: {name: this.name},
             });
         },
         goToEditing() {
             this.$router.push({
                 name: "editing",
-                params: this.name,
+                params: {name: this.name},
             });
         },
         emitRename() {
@@ -49,6 +49,8 @@ export default {
 </script>
 
 <style scoped>
+@import '../../../styles/variables.css';
+
 .title {
     width: 100%;
     height: 100%;
@@ -69,8 +71,12 @@ button {
     margin: auto;
 }
 
+button:hover {
+    background-color: var(--white-hover);
+}
+
 .flip-card {
-    margin: 5vh auto;
+    margin: 2vh auto;
     width: 25vw;
     height: 30vh;
     perspective: 1000px;
@@ -94,7 +100,6 @@ button {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
     border: solid 2px #bbbbbb;
     border-radius: 5px;
 }

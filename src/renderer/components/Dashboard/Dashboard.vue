@@ -11,7 +11,7 @@
             </div>
             <div class="column is-one-third">
                 <div class="add-card" v-on:click="listModal = !listModal">
-
+                    <img src="../../assets/plus.png" alt="plus">
                 </div>
             </div>
         </div>
@@ -50,7 +50,6 @@ export default {
     components: { Navbar, ListCard, ListModal, RenameModal, ConfirmModal },
     data() {
         return {
-            navigation: "none",
             lists: [],
             listModal: false,
             renameModal: false,
@@ -74,7 +73,7 @@ export default {
             this.refreshLists();
         },
         refreshLists() {
-            this.lists = dbhelper.getTables().map((table) => table.name);
+            this.lists = dbhelper.getTables();
             console.log(this.lists);
         },
         goToRename(name) {
@@ -100,7 +99,7 @@ export default {
         },
     },
     created: function () {
-        this.lists = dbhelper.getTables().map((table) => table.name);
+        this.lists = dbhelper.getTables();
         console.log(this.lists);
     },
 };
@@ -114,17 +113,25 @@ export default {
 
 .add-card {
     cursor: pointer;
-    position: absolute;
-    margin: 5vh auto;
+    position: relative;
+    margin: 2vh auto;
     width: 25vw;
     height: 30vh;
     border: solid 2px #bbbbbb;
     border-radius: 5px;
-    /* background-image: url(../../assets/plus.png); */
+}
+
+.add-card img{
+    position: relative;
+    display: block;
+    margin: auto;
+    width: 40%;
+    top: 25%;
 }
 
 .add-card:hover{
     border: solid 2px #999;
-    background-color: #eee;
+    background-blend-mode: darken;
+    filter: brightness(90%)
 }
 </style>

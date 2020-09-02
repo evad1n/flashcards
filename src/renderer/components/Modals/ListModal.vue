@@ -27,7 +27,10 @@
                     </div>
                 </div>
 
-                <button v-on:click="frontFields.push('')" class="button is-info mb-4">Add Front Field</button>
+                <button
+                    v-on:click="frontFields.push('')"
+                    class="button is-info mb-4"
+                >Add Front Field</button>
 
                 <div
                     v-for="(field, column) in backFields"
@@ -69,18 +72,20 @@ export default {
     },
     methods: {
         submitList() {
-            // Send data to parent
-            this.$emit("add-list", {
-                name: this.name,
-                front: this.frontFields,
-                back: this.backFields,
-            });
-            // Close modal
-            this.$emit("close-modal");
-            // Reset fields
-            this.name = "";
-            this.frontFields = [""];
-            this.backFields = [""];
+            if (this.isValid()) {
+                // Send data to parent
+                this.$emit("add-list", {
+                    name: this.name,
+                    front: this.frontFields,
+                    back: this.backFields,
+                });
+                // Close modal
+                this.$emit("close-modal");
+                // Reset fields
+                this.name = "";
+                this.frontFields = [""];
+                this.backFields = [""];
+            }
         },
         isValid() {
             this.frontFields.forEach((field) => {
